@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import axios from 'axios';
-import API_BASE_URL from '../config/api';
+import getApiBaseUrl from '../config/api';
 
 interface User {
   id: number;
@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (token) {
       setupAxiosInterceptors(token);
       // Verify token with backend
-      axios.get(`${API_BASE_URL}/auth/me`)
+      axios.get(`${getApiBaseUrl()}/auth/me`)
         .then(response => {
           setUser(response.data);
         })
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+      const response = await axios.post(`${getApiBaseUrl()}/auth/login`, {
         email,
         password,
       });
@@ -90,7 +90,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const register = async (email: string, password: string, name: string) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/register`, {
+      const response = await axios.post(`${getApiBaseUrl()}/auth/register`, {
         email,
         password,
         name,

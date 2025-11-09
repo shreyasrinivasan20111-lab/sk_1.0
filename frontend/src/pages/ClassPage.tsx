@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { ArrowLeft, Play, Pause, Square, FileText, Music, Upload, AlertCircle, Clock } from 'lucide-react';
-import API_BASE_URL from '../config/api';
+import getApiBaseUrl from '../config/api';
 import './ClassPage.css';
 
 const getFileUrl = (filePath: string) => {
@@ -78,7 +78,7 @@ const ClassPage: React.FC = () => {
 
   const fetchClassData = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/classes/${id}`);
+      const response = await axios.get(`${getApiBaseUrl()}/classes/${id}`);
       setClassData(response.data);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to load class data');
@@ -105,7 +105,7 @@ const ClassPage: React.FC = () => {
     
     if (timerSeconds > 0) {
       try {
-        await axios.post(`${API_BASE_URL}/classes/${id}/practice`, {
+        await axios.post(`${getApiBaseUrl()}/classes/${id}/practice`, {
           duration: timerSeconds,
           notes: practiceNotes
         });
@@ -141,7 +141,7 @@ const ClassPage: React.FC = () => {
     }
 
     try {
-      await axios.post(`${API_BASE_URL}/upload/material`, formData, {
+      await axios.post(`${getApiBaseUrl()}/upload/material`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       
