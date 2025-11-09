@@ -4,9 +4,16 @@ A complete course management application for spiritual learning, featuring role-
 
 ## 🚀 Production Deployment
 
-This webapp is now ready for deployment to any domain with `index.html` at the root level.
+This webapp is ready for **Vercel deployment** with full-stack serverless functions.
 
-### Quick Deploy Steps
+### ✅ Vercel Deployment (Recommended)
+
+1. **Import to Vercel**: Connect your GitHub repository
+2. **Auto-deploy**: Vercel detects the configuration automatically
+3. **Environment**: JWT_SECRET is pre-configured
+4. **One-click deployment**: No additional setup needed
+
+### Alternative: Traditional Server Deployment
 
 1. **Upload all files to your web server** (including `index.html` at the root)
 2. **Set environment variables** (see `.env` file)
@@ -70,6 +77,27 @@ UPLOAD_PATH=./uploads
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run deploy` - Full deployment preparation
+
+### 🔧 Troubleshooting Deployment
+
+#### Common Vercel Issues:
+
+1. **Function Runtime Error**:
+   - ✅ Fixed: Using `@vercel/node@20.x` runtime
+   - Located in `vercel.json`
+
+2. **JWT_SECRET Missing**:
+   - ✅ Fixed: Environment variable configured
+   - Can be customized in Vercel dashboard
+
+3. **Build Failures**:
+   - Ensure all dependencies are in `package.json`
+   - Check TypeScript compilation in `frontend/`
+
+#### Verification Steps:
+1. Test `/api/health` endpoint
+2. Login with demo credentials
+3. Navigate through all pages
 
 ### Support
 
