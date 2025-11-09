@@ -7,8 +7,14 @@ import API_BASE_URL from '../config/api';
 import './ClassPage.css';
 
 const getFileUrl = (filePath: string) => {
-  const baseUrl = import.meta.env.PROD ? '' : 'http://localhost:3001';
-  return `${baseUrl}${filePath}`;
+  // In production (Vercel), files are served from the same domain
+  // In development, files are served from the backend server
+  if (typeof window !== 'undefined') {
+    if (window.location.hostname.includes('vercel.app') || import.meta.env.PROD) {
+      return filePath; // Vercel serves files from same domain
+    }
+  }
+  return `http://localhost:3001${filePath}`;
 };
 
 interface Material {
