@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { BookOpen, Users, Clock, Shield } from 'lucide-react';
 import './Home.css';
 
 const Home: React.FC = () => {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { BookOpen, Clock, ChevronRight, AlertCircle } from 'lucide-react';
+import API_BASE_URL from '../config/api';
 import './Dashboard.css';
 
 interface Class {
@@ -23,7 +24,7 @@ const Dashboard: React.FC = () => {
 
   const fetchClasses = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/classes');
+      const response = await axios.get(`${API_BASE_URL}/classes`);
       setClasses(response.data);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to load classes');

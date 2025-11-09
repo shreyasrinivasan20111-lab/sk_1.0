@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Users, Clock, UserPlus, UserMinus, BarChart3 } from 'lucide-react';
+import API_BASE_URL from '../config/api';
 import './AdminPanel.css';
 
 interface Student {
@@ -60,7 +61,7 @@ const AdminPanel: React.FC = () => {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:3001/api/admin/students');
+      const response = await axios.get(`${API_BASE_URL}/admin/students`);
       setStudents(response.data);
     } catch (error) {
       console.error('Failed to fetch students:', error);
@@ -71,7 +72,7 @@ const AdminPanel: React.FC = () => {
 
   const fetchClasses = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/classes');
+      const response = await axios.get(`${API_BASE_URL}/classes`);
       setClasses(response.data);
     } catch (error) {
       console.error('Failed to fetch classes:', error);
@@ -81,7 +82,7 @@ const AdminPanel: React.FC = () => {
   const fetchSessions = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:3001/api/admin/practice-sessions');
+      const response = await axios.get(`${API_BASE_URL}/admin/practice-sessions`);
       setSessions(response.data);
     } catch (error) {
       console.error('Failed to fetch sessions:', error);
@@ -93,7 +94,7 @@ const AdminPanel: React.FC = () => {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:3001/api/admin/stats');
+      const response = await axios.get(`${API_BASE_URL}/admin/stats`);
       setStats(response.data);
     } catch (error) {
       console.error('Failed to fetch stats:', error);
@@ -109,7 +110,7 @@ const AdminPanel: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:3001/api/admin/assign-class', {
+      await axios.post(`${API_BASE_URL}/admin/assign-class`, {
         studentId: selectedStudent,
         classId: selectedClass
       });
@@ -130,7 +131,7 @@ const AdminPanel: React.FC = () => {
     if (!confirm(`Remove ${className} assignment for this student?`)) return;
 
     try {
-      await axios.delete('http://localhost:3001/api/admin/remove-class', {
+      await axios.delete(`${API_BASE_URL}/admin/remove-class`, {
         data: { studentId, classId: classToRemove.id }
       });
       

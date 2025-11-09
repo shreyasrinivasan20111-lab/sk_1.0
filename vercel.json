@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "../dist"
+      }
+    },
+    {
+      "src": "backend/src/vercel-server.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/backend/src/vercel-server.ts"
+    },
+    {
+      "src": "/uploads/(.*)",
+      "dest": "/backend/src/vercel-server.ts"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/$1"
+    }
+  ],
+  "functions": {
+    "backend/src/vercel-server.ts": {
+      "includeFiles": "backend/course_management.db"
+    }
+  }
+}

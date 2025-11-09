@@ -3,7 +3,13 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import { ArrowLeft, Play, Pause, Square, FileText, Music, Upload, AlertCircle, Clock } from 'lucide-react';
+import API_BASE_URL from '../config/api';
 import './ClassPage.css';
+
+const getFileUrl = (filePath: string) => {
+  const baseUrl = import.meta.env.PROD ? '' : 'http://localhost:3001';
+  return `${baseUrl}${filePath}`;
+};
 
 interface Material {
   id: number;
@@ -66,7 +72,7 @@ const ClassPage: React.FC = () => {
 
   const fetchClassData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/classes/${id}`);
+      const response = await axios.get(`${API_BASE_URL}/classes/${id}`);
       setClassData(response.data);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to load class data');
@@ -93,7 +99,7 @@ const ClassPage: React.FC = () => {
     
     if (timerSeconds > 0) {
       try {
-        await axios.post(`http://localhost:3001/api/classes/${id}/practice`, {
+        await axios.post(`${API_BASE_URL}/classes/${id}/practice`, {
           duration: timerSeconds,
           notes: practiceNotes
         });
@@ -129,7 +135,7 @@ const ClassPage: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:3001/api/upload/material', formData, {
+      await axios.post(`${API_BASE_URL}/upload/material`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       
@@ -272,7 +278,7 @@ const ClassPage: React.FC = () => {
                     )}
                     {material.file_path && (
                       <a 
-                        href={`http://localhost:3001${material.file_path}`}
+                        href={getFileUrl(material.file_path)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="material-link"
@@ -305,7 +311,7 @@ const ClassPage: React.FC = () => {
                     {material.file_path && (
                       <div className="audio-player">
                         <audio controls>
-                          <source src={`http://localhost:3001${material.file_path}`} />
+                          <source src={getFileUrl(material.file_path)} />
                           Your browser does not support the audio element.
                         </audio>
                       </div>

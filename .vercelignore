@@ -1,0 +1,12 @@
+# Vercel ignore file
+node_modules
+.git
+.env.local
+.DS_Store
+*.log
+backend/dist
+frontend/dist
+backend/node_modules
+frontend/node_modules
+backend/course_management.db
+backend/uploads
