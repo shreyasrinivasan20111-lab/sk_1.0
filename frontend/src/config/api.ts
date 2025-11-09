@@ -8,16 +8,18 @@ const getApiBaseUrl = () => {
   
   // Detect environment
   if (typeof window !== 'undefined') {
-    // Check if we're on Vercel production
+    // Check if we're on Vercel production - use relative /api paths
     if (window.location.hostname.includes('vercel.app')) {
-      // For production, we need a deployed backend
-      // Since we don't have a backend deployed yet, show a helpful message
-      console.error('Production backend not configured. Please deploy backend and set VITE_API_BASE_URL environment variable in Vercel.');
-      return '/api'; // This will fail but provides context
+      return '/api'; // Vercel serverless functions
+    }
+    
+    // Check if we're on localhost and can detect built version
+    if (window.location.hostname === 'localhost' && window.location.port !== '5174') {
+      return '/api'; // Built version served locally
     }
   }
   
-  // Default to localhost for development
+  // Default to local backend for development
   return 'http://localhost:3001/api';
 };
 

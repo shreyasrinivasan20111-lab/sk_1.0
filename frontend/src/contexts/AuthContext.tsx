@@ -75,11 +75,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setupAxiosInterceptors(token);
       setUser(user);
     } catch (error: any) {
-      // Provide helpful error messages for production
+      // Provide helpful error messages for different environments
       if (error.code === 'ERR_NETWORK' || !error.response) {
         const isProduction = window.location.hostname.includes('vercel.app');
         if (isProduction) {
-          throw new Error('Backend server not available. The backend needs to be deployed separately. Please check the deployment documentation.');
+          throw new Error('Unable to connect to the authentication service. Please try again in a moment.');
         } else {
           throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:3001');
         }
@@ -101,11 +101,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setupAxiosInterceptors(token);
       setUser(user);
     } catch (error: any) {
-      // Provide helpful error messages for production
+      // Provide helpful error messages for different environments
       if (error.code === 'ERR_NETWORK' || !error.response) {
         const isProduction = window.location.hostname.includes('vercel.app');
         if (isProduction) {
-          throw new Error('Backend server not available. The backend needs to be deployed separately. Please check the deployment documentation.');
+          throw new Error('Unable to connect to the registration service. Please try again in a moment.');
         } else {
           throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:3001');
         }
