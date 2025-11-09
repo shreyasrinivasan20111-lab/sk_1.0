@@ -17,77 +17,83 @@ exports.db = new sqlite3_1.default.Database(DB_PATH, (err) => {
 });
 const initializeDatabase = () => {
     // Users table
-    exports.db.run(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      email TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL,
-      name TEXT NOT NULL,
-      role TEXT NOT NULL DEFAULT 'student',
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-    // Classes table
-    exports.db.run(`
-    CREATE TABLE IF NOT EXISTS classes (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT UNIQUE NOT NULL,
-      description TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-    // User class assignments table
-    exports.db.run(`
-    CREATE TABLE IF NOT EXISTS user_classes (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
-      class_id INTEGER NOT NULL,
-      assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-      FOREIGN KEY (class_id) REFERENCES classes (id) ON DELETE CASCADE,
-      UNIQUE(user_id, class_id)
-    )
-  `);
-    // Materials table (for lyrics and recordings)
-    exports.db.run(`
-    CREATE TABLE IF NOT EXISTS materials (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      class_id INTEGER NOT NULL,
-      title TEXT NOT NULL,
-      type TEXT NOT NULL, -- 'lyrics' or 'recording'
-      file_path TEXT,
-      content TEXT, -- for text-based materials
-      uploaded_by INTEGER NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (class_id) REFERENCES classes (id) ON DELETE CASCADE,
-      FOREIGN KEY (uploaded_by) REFERENCES users (id) ON DELETE CASCADE
-    )
-  `);
-    // Practice sessions table (for timer tracking)
-    exports.db.run(`
-    CREATE TABLE IF NOT EXISTS practice_sessions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
-      class_id INTEGER NOT NULL,
-      duration INTEGER NOT NULL, -- in seconds
-      notes TEXT,
-      session_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-      FOREIGN KEY (class_id) REFERENCES classes (id) ON DELETE CASCADE
-    )
-  `);
-    // Insert default classes
-    const defaultClasses = [
-        'Kirtanam',
-        'Smaranam',
-        'Pada Sevanam',
-        'Archanam',
-        'Vandanam'
-    ];
-    defaultClasses.forEach(className => {
-        exports.db.run('INSERT OR IGNORE INTO classes (name, description) VALUES (?, ?)', [className, `${className} class for spiritual practice`]);
+    exports.db.serialize(() => {
+        exports.db.run(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        name TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'student',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+        // Classes table
+        exports.db.run(`
+      CREATE TABLE IF NOT EXISTS classes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE NOT NULL,
+        description TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+        // User class assignments table
+        exports.db.run(`
+      CREATE TABLE IF NOT EXISTS user_classes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        class_id INTEGER NOT NULL,
+        assigned_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+        FOREIGN KEY (class_id) REFERENCES classes (id) ON DELETE CASCADE,
+        UNIQUE(user_id, class_id)
+      )
+    `);
+        // Materials table (for lyrics and recordings)
+        exports.db.run(`
+      CREATE TABLE IF NOT EXISTS materials (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        class_id INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        type TEXT NOT NULL, -- 'lyrics' or 'recording'
+        file_path TEXT,
+        content TEXT, -- for text-based materials
+        uploaded_by INTEGER NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (class_id) REFERENCES classes (id) ON DELETE CASCADE,
+        FOREIGN KEY (uploaded_by) REFERENCES users (id) ON DELETE CASCADE
+      )
+    `);
+        // Practice sessions table (for timer tracking)
+        exports.db.run(`
+      CREATE TABLE IF NOT EXISTS practice_sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        class_id INTEGER NOT NULL,
+        duration INTEGER NOT NULL, -- in seconds
+        notes TEXT,
+        session_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+        FOREIGN KEY (class_id) REFERENCES classes (id) ON DELETE CASCADE
+      )
+    `);
+        // Insert default classes
+        const defaultClasses = [
+            'Kirtanam',
+            'Smaranam',
+            'Pada Sevanam',
+            'Archanam',
+            'Vandanam'
+        ];
+        defaultClasses.forEach(className => {
+            exports.db.run('INSERT OR IGNORE INTO classes (name, description) VALUES (?, ?)', [className, `${className} class for spiritual practice`], (err) => {
+                if (err) {
+                    console.error('Error inserting default class:', err);
+                }
+            });
+        });
+        console.log('Database initialized successfully');
     });
-    console.log('Database initialized successfully');
 };
 exports.initializeDatabase = initializeDatabase;
 //# sourceMappingURL=init.js.map

@@ -35,6 +35,18 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Course Management API is running' });
 });
 
+// Serve static files from the frontend build
+app.use(express.static(path.join(__dirname, '../../dist')));
+
+// Handle React Router routes - serve index.html for all non-API routes
+app.use((req, res, next) => {
+  if (!req.url.startsWith('/api') && !req.url.startsWith('/uploads')) {
+    res.sendFile(path.join(__dirname, '../../dist/index.html'));
+  } else {
+    next();
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
