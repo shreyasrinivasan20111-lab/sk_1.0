@@ -2,23 +2,5 @@
   "version": 2,
   "buildCommand": "npm run vercel-build",
   "outputDirectory": "dist",
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/backend/src/vercel-server.ts"
-    },
-    {
-      "src": "/uploads/(.*)",
-      "dest": "/backend/src/vercel-server.ts"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/dist/$1"
-    }
-  ],
-  "functions": {
-    "backend/src/vercel-server.ts": {
-      "includeFiles": "backend/course_management.db"
-    }
-  }
+  "framework": null
 }
