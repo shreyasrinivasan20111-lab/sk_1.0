@@ -75,6 +75,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setupAxiosInterceptors(token);
       setUser(user);
     } catch (error: any) {
+      // Provide helpful error messages for production
+      if (error.code === 'ERR_NETWORK' || !error.response) {
+        const isProduction = window.location.hostname.includes('vercel.app');
+        if (isProduction) {
+          throw new Error('Backend server not available. The backend needs to be deployed separately. Please check the deployment documentation.');
+        } else {
+          throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:3001');
+        }
+      }
       throw new Error(error.response?.data?.error || 'Login failed');
     }
   };
@@ -92,6 +101,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setupAxiosInterceptors(token);
       setUser(user);
     } catch (error: any) {
+      // Provide helpful error messages for production
+      if (error.code === 'ERR_NETWORK' || !error.response) {
+        const isProduction = window.location.hostname.includes('vercel.app');
+        if (isProduction) {
+          throw new Error('Backend server not available. The backend needs to be deployed separately. Please check the deployment documentation.');
+        } else {
+          throw new Error('Cannot connect to server. Make sure the backend is running on http://localhost:3001');
+        }
+      }
       throw new Error(error.response?.data?.error || 'Registration failed');
     }
   };
