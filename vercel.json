@@ -9,6 +9,10 @@
       "destination": "/api/classes/[id]?id=$1"
     },
     {
+      "source": "/api/user/classes",
+      "destination": "/api/user/classes"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },
