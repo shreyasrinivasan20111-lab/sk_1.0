@@ -79,8 +79,29 @@ const ClassPage: React.FC = () => {
   const fetchClassData = async () => {
     try {
       const response = await axios.get(`${getApiBaseUrl()}/classes/${id}`);
-      setClassData(response.data);
+      console.log('Class details API response:', response.data);
+      
+      // Ensure materials structure exists
+      const classData = response.data;
+      if (classData && typeof classData === 'object') {
+        // Initialize materials if missing
+        if (!classData.materials) {
+          classData.materials = { lyrics: [], recordings: [] };
+        }
+        // Ensure lyrics and recordings arrays exist
+        if (!Array.isArray(classData.materials.lyrics)) {
+          classData.materials.lyrics = [];
+        }
+        if (!Array.isArray(classData.materials.recordings)) {
+          classData.materials.recordings = [];
+        }
+        
+        setClassData(classData);
+      } else {
+        setError('Invalid class data received');
+      }
     } catch (err: any) {
+      console.error('Class details fetch error:', err);
       setError(err.response?.data?.error || 'Failed to load class data');
     } finally {
       setLoading(false);
@@ -271,7 +292,7 @@ const ClassPage: React.FC = () => {
             </div>
             
             <div className="materials-list">
-              {classData.materials.lyrics.length === 0 ? (
+              {!classData.materials?.lyrics || classData.materials.lyrics.length === 0 ? (
                 <p className="no-materials">No lyrics available yet</p>
               ) : (
                 classData.materials.lyrics.map((material) => (
@@ -308,7 +329,7 @@ const ClassPage: React.FC = () => {
             </div>
             
             <div className="materials-list">
-              {classData.materials.recordings.length === 0 ? (
+              {!classData.materials?.recordings || classData.materials.recordings.length === 0 ? (
                 <p className="no-materials">No recordings available yet</p>
               ) : (
                 classData.materials.recordings.map((material) => (
