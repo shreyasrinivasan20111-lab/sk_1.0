@@ -1,64 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Mock practice sessions data for demo
-const practiceSessions = [
-  {
-    id: 1,
-    student_name: 'John Doe',
-    class_name: 'Śravaṇaṃ', 
-    duration: 40,
-    date: '2024-11-09',
-    notes: 'Deep listening to Bhāgavatam recitation'
-  },
-  {
-    id: 2,
-    student_name: 'John Doe',
-    class_name: 'Kirtanam', 
-    duration: 45,
-    date: '2024-11-08',
-    notes: 'Focused on devotional melodies'
-  },
-  {
-    id: 2,
-    student_name: 'Jane Smith',
-    class_name: 'Pada Sevanam',
-    duration: 60,
-    date: '2024-11-07', 
-    notes: 'Service meditation practice'
-  },
-  {
-    id: 3,
-    student_name: 'Jane Smith',
-    class_name: 'Pada Sevanam',
-    duration: 60,
-    date: '2024-11-07', 
-    notes: 'Service meditation practice'
-  },
-  {
-    id: 4,
-    student_name: 'Mike Johnson',
-    class_name: 'Vandanam',
-    duration: 30,
-    date: '2024-11-06',
-    notes: 'Prayer and prostration practice'
-  },
-  {
-    id: 5,
-    student_name: 'John Doe', 
-    class_name: 'Smaranam',
-    duration: 35,
-    date: '2024-11-05',
-    notes: 'Remembrance and contemplation'
-  },
-  {
-    id: 6,
-    student_name: 'Jane Smith',
-    class_name: 'Archanam',
-    duration: 50,
-    date: '2024-11-04',
-    notes: 'Ritual worship practice'
-  }
-];
+// Mock practice sessions data for demo - empty array as all students removed
+const practiceSessions: any[] = [];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers

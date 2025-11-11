@@ -13,16 +13,9 @@ const users: User[] = [
   {
     id: 1,
     name: 'Admin User',
-    email: 'admin@saikalpataruvidyalaya.com',
-    password: 'admin123',
+    email: 'admin@saikalpataru.com',
+    password: 'admin@sai123',
     role: 'admin'
-  },
-  {
-    id: 2,
-    name: 'Test Student',
-    email: 'student@example.com',
-    password: 'student123',
-    role: 'student'
   }
 ];
 

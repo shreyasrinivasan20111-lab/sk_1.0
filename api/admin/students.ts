@@ -1,29 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Mock students data for demo
-const students = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    assigned_classes: 'Śravaṇaṃ,Kirtanam,Smaranam',
-    registration_date: '2024-01-15'
-  },
-  {
-    id: 2,
-    name: 'Jane Smith', 
-    email: 'jane@example.com',
-    assigned_classes: 'Śravaṇaṃ,Pada Sevanam,Archanam',
-    registration_date: '2024-02-20'
-  },
-  {
-    id: 3,
-    name: 'Mike Johnson',
-    email: 'mike@example.com', 
-    assigned_classes: 'Śravaṇaṃ,Vandanam',
-    registration_date: '2024-03-10'
-  }
-];
+// Mock students data for demo - empty array as all users removed except admin
+const students: any[] = [];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers

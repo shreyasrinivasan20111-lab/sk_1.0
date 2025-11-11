@@ -4,15 +4,9 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 const users = [
   {
     id: 1,
-    email: 'admin@saikalpataruvidyalaya.com',
+    email: 'admin@saikalpataru.com',
     name: 'Admin User',
     role: 'admin' as const
-  },
-  {
-    id: 2,
-    email: 'student@example.com',
-    name: 'Student User',
-    role: 'student' as const
   }
 ];
 
