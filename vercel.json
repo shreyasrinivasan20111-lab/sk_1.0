@@ -1,7 +1,12 @@
 {
   "version": 2,
-  "buildCommand": "npm install && cd frontend && npm install && npm run build",
+  "buildCommand": "cd frontend && npm ci && npm run build",
   "outputDirectory": "dist",
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -13,6 +18,10 @@
     }
   ],
   "env": {
-    "JWT_SECRET": "your-super-secret-jwt-key-change-this-in-production-2024"
+    "JWT_SECRET": "sai-kalpataru-jwt-secret-2024-vercel-production"
+  },
+  "regions": ["iad1"],
+  "github": {
+    "silent": true
   }
 }

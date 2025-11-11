@@ -1,12 +1,45 @@
-# Vercel ignore file
-node_modules
-.git
+# Vercel ignore file - optimized for serverless deployment
+
+# Backend (not used in Vercel serverless setup)
+backend/
+
+# Environment files (use Vercel dashboard for env vars)
+.env
 .env.local
+.env.development
+.env.test
+
+# Development dependencies
+node_modules/
+frontend/node_modules/
+
+# Documentation (except README)
+DEPLOYMENT*.md
+VERCEL*.md
+API-*.md
+RUNTIME*.md
+*.guide.md
+
+# Database files (using in-memory for demo)
+*.db
+*.sqlite
+*.sqlite3
+uploads/
+
+# Build artifacts
+frontend/dist/
+
+# Development files
+.git/
 .DS_Store
 *.log
-backend/dist
-frontend/dist
-backend/node_modules
-frontend/node_modules
-backend/course_management.db
-backend/uploads
+*.pid
+.vscode/
+.idea/
+
+# Test files
+test/
+tests/
+__tests__/
+*.test.*
+*.spec.*

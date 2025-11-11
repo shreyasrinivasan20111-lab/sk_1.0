@@ -23,11 +23,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@vercel/node": "^3.0.21",
-    "bcrypt": "^5.1.1",
-    "jsonwebtoken": "^9.0.2",
-    "sqlite3": "^5.1.6",
-    "multer": "^1.4.5-lts.1"
+    "@vercel/node": "^3.0.21"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
