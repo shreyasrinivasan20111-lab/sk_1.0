@@ -1,7 +1,7 @@
 // Quick test script to debug API URL detection
 const getApiBaseUrl = () => {
-  // Use environment variable if available
-  const envApiUrl = process.env.VITE_API_BASE_URL;
+  // Use environment variable if available (Vite way)
+  const envApiUrl = import.meta.env.VITE_API_BASE_URL;
   if (envApiUrl) {
     console.log('Using env variable:', envApiUrl);
     return envApiUrl;
