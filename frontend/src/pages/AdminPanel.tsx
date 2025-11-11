@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Users, Clock, UserPlus, UserMinus, BarChart3 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import getApiBaseUrl from '../config/api';
 import './AdminPanel.css';
 
@@ -36,6 +37,7 @@ interface Stats {
 }
 
 const AdminPanel: React.FC = () => {
+  useAuth(); // Ensure authentication context is available
   const [activeTab, setActiveTab] = useState<'students' | 'sessions' | 'stats'>('students');
   const [students, setStudents] = useState<Student[]>([]);
   const [classes, setClasses] = useState<Class[]>([]);
@@ -61,7 +63,12 @@ const AdminPanel: React.FC = () => {
   const fetchStudents = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${getApiBaseUrl()}/admin/students`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${getApiBaseUrl()}/admin/students`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       console.log('Students API response:', response.data);
       
       if (Array.isArray(response.data)) {
@@ -98,7 +105,12 @@ const AdminPanel: React.FC = () => {
   const fetchSessions = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${getApiBaseUrl()}/admin/practice-sessions`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${getApiBaseUrl()}/admin/practice-sessions`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       console.log('Sessions API response:', response.data);
       
       if (Array.isArray(response.data)) {
@@ -118,7 +130,12 @@ const AdminPanel: React.FC = () => {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${getApiBaseUrl()}/admin/stats`);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${getApiBaseUrl()}/admin/stats`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       console.log('Stats API response:', response.data);
       
       if (response.data && typeof response.data === 'object') {
@@ -153,9 +170,14 @@ const AdminPanel: React.FC = () => {
     }
 
     try {
+      const token = localStorage.getItem('token');
       await axios.post(`${getApiBaseUrl()}/admin/assign-class`, {
         studentId: selectedStudent,
         classId: selectedClass
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
       
       alert('Class assigned successfully!');
@@ -174,8 +196,12 @@ const AdminPanel: React.FC = () => {
     if (!confirm(`Remove ${className} assignment for this student?`)) return;
 
     try {
+      const token = localStorage.getItem('token');
       await axios.delete(`${getApiBaseUrl()}/admin/remove-class`, {
-        data: { studentId, classId: classToRemove.id }
+        data: { studentId, classId: classToRemove.id },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
       
       alert('Class assignment removed successfully!');
