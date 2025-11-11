@@ -153,7 +153,12 @@ async function handleAssignClass(req: VercelRequest, res: VercelResponse) {
     global.students = students;
   }
 
-  console.log('Class assigned. Student now has:', student.assigned_classes);
+  console.log('=== ADMIN ASSIGN DEBUG ===');
+  console.log('Class assigned to student ID:', studentId);
+  console.log('Student object after assignment:', student);
+  console.log('All students after assignment:', JSON.stringify(students, null, 2));
+  console.log('Global students set:', typeof global !== 'undefined' ? global.students : 'global not available');
+  console.log('=== END ADMIN DEBUG ===');
 
   return res.status(200).json({
     message: 'Class assigned successfully',

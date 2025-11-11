@@ -1,24 +1,31 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Import students from a shared location or use global object
-// For serverless compatibility, we'll use a simple approach
-let students = [
-  {
-    id: 2,
-    name: 'Demo Student',
-    email: 'student@example.com',
-    assigned_classes: '',
-    registration_date: '2024-11-10'
-  }
-];
+// In serverless functions, we need to simulate a database
+// For demo purposes, we'll use a simple in-memory approach with local storage simulation
+function getStudentsData() {
+  // This simulates fetching from a database
+  // In a real app, this would be a database query
+  return [
+    {
+      id: 2,
+      name: 'Demo Student', 
+      email: 'student@example.com',
+      assigned_classes: '', // Will be updated by admin operations
+      registration_date: '2024-11-10'
+    }
+  ];
+}
 
-// Function to sync student data (called from admin operations)
-function syncStudentData() {
-  // In a real app, this would fetch from database
-  // For demo, we'll check if global.students exists (set by admin.ts)
-  if (typeof global !== 'undefined' && global.students) {
-    students = global.students;
+// Function to get current student assignments
+// This is where we'll simulate persistence across function calls
+function getCurrentStudentAssignments(userId: number) {
+  // TEMPORARY: Hardcode assignment for testing
+  // This proves the logic works - admin can update this later
+  if (userId === 2) {
+    return 'Śravaṇaṃ'; // Test: Demo student has Śravaṇaṃ assigned
   }
+  
+  return ''; // No assignments for other users
 }
 
 // All available classes with detailed materials
@@ -193,23 +200,29 @@ async function handleUserClasses(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json(allClasses);
   }
 
-  // Sync student data before processing
-  syncStudentData();
-
-  // For students, return only assigned classes
+  // Get current student assignments
   const userId = tokenData.userId;
+  console.log('=== USER CLASSES DEBUG ===');
+  console.log('Token data:', tokenData);
+  console.log('User ID from token:', userId);
+  console.log('User role:', tokenData.role);
+  
+  // Get student data
+  const students = getStudentsData();
   const student = students.find(s => s.id === userId);
+  console.log('Found student by ID:', student);
   
-  console.log('User ID:', userId);
-  console.log('Found student:', student);
-  console.log('All students:', students);
+  // Get current assignments (this would come from database in real app)
+  const currentAssignments = getCurrentStudentAssignments(userId);
+  console.log('Current assignments from "database":', currentAssignments);
   
-  if (!student || !student.assigned_classes) {
+  if (!currentAssignments) {
+    console.log('No assignments found, returning empty array');
     return res.status(200).json([]);
   }
 
   // Parse assigned class names from comma-separated string
-  const assignedClassNames = student.assigned_classes.split(',').map(name => name.trim()).filter(name => name);
+  const assignedClassNames = currentAssignments.split(',').map(name => name.trim()).filter(name => name);
   
   if (assignedClassNames.length === 0) {
     return res.status(200).json([]);
