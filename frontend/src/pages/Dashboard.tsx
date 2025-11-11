@@ -24,8 +24,13 @@ const Dashboard: React.FC = () => {
 
   const fetchClasses = async () => {
     try {
-      const response = await axios.get(`${getApiBaseUrl()}/classes`);
-      console.log('Classes API response:', response.data);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${getApiBaseUrl()}/user/classes`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log('User Classes API response:', response.data);
       
       // Ensure response.data is an array
       if (Array.isArray(response.data)) {

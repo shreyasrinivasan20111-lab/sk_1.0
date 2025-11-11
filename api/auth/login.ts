@@ -1,23 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-
-// Simple in-memory user store for demo (replace with real database in production)
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-  role: 'admin' | 'student';
-}
-
-const users: User[] = [
-  {
-    id: 1,
-    name: 'Admin User',
-    email: 'admin@saikalpataru.com',
-    password: 'admin@sai123',
-    role: 'admin'
-  }
-];
+import { users } from '../shared/data';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers

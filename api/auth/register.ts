@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
+import { users, addUser, addStudent, getUserByEmail, getNextUserId } from '../shared/data';
 
-// Simple in-memory user store for demo
 interface User {
   id: number;
   name: string;
@@ -8,18 +8,6 @@ interface User {
   password: string;
   role: 'admin' | 'student';
 }
-
-const users: User[] = [
-  {
-    id: 1,
-    name: 'Admin User',
-    email: 'admin@saikalpataru.com',
-    password: 'admin@sai123',
-    role: 'admin'
-  }
-];
-
-let userIdCounter = 2;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
@@ -47,22 +35,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Check if user already exists
-    const existingUser = users.find(u => u.email === email);
+    const existingUser = getUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
     // Create new user
     const newUser: User = {
-      id: userIdCounter++,
+      id: getNextUserId(),
       name,
       email,
       password, // In production, hash this password
       role: 'student'
     };
 
-    users.push(newUser);
-
+    addUser(newUser);
+    
+    // Also add to students list for admin management
+    addStudent(newUser);
+    
     // Create simple token
     const tokenData = {
       userId: newUser.id,

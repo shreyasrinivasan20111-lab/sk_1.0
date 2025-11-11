@@ -1,7 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-
-// Mock students data for demo - empty array as all users removed except admin
-const students: any[] = [];
+import { getAllStudents } from '../shared/data';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
@@ -35,7 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (req.method === 'GET') {
-      return res.status(200).json(students);
+      return res.status(200).json(getAllStudents());
     }
 
     return res.status(405).json({ error: 'Method not allowed' });
