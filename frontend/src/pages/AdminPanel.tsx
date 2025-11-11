@@ -62,9 +62,17 @@ const AdminPanel: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${getApiBaseUrl()}/admin/students`);
-      setStudents(response.data);
+      console.log('Students API response:', response.data);
+      
+      if (Array.isArray(response.data)) {
+        setStudents(response.data);
+      } else {
+        console.error('Expected array but received:', typeof response.data, response.data);
+        setStudents([]);
+      }
     } catch (error) {
       console.error('Failed to fetch students:', error);
+      setStudents([]);
     } finally {
       setLoading(false);
     }
@@ -73,9 +81,17 @@ const AdminPanel: React.FC = () => {
   const fetchClasses = async () => {
     try {
       const response = await axios.get(`${getApiBaseUrl()}/classes`);
-      setClasses(response.data);
+      console.log('Admin Classes API response:', response.data);
+      
+      if (Array.isArray(response.data)) {
+        setClasses(response.data);
+      } else {
+        console.error('Expected array but received:', typeof response.data, response.data);
+        setClasses([]);
+      }
     } catch (error) {
       console.error('Failed to fetch classes:', error);
+      setClasses([]);
     }
   };
 
@@ -83,9 +99,17 @@ const AdminPanel: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${getApiBaseUrl()}/admin/practice-sessions`);
-      setSessions(response.data);
+      console.log('Sessions API response:', response.data);
+      
+      if (Array.isArray(response.data)) {
+        setSessions(response.data);
+      } else {
+        console.error('Expected array but received:', typeof response.data, response.data);
+        setSessions([]);
+      }
     } catch (error) {
       console.error('Failed to fetch sessions:', error);
+      setSessions([]);
     } finally {
       setLoading(false);
     }
@@ -95,9 +119,28 @@ const AdminPanel: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${getApiBaseUrl()}/admin/stats`);
-      setStats(response.data);
+      console.log('Stats API response:', response.data);
+      
+      if (response.data && typeof response.data === 'object') {
+        // Validate that studentsByClass is an array
+        if (response.data.studentsByClass && Array.isArray(response.data.studentsByClass)) {
+          setStats(response.data);
+        } else {
+          console.error('Stats studentsByClass is not an array:', response.data);
+          setStats({
+            totalStudents: 0,
+            totalSessions: 0,
+            totalDuration: 0,
+            studentsByClass: []
+          });
+        }
+      } else {
+        console.error('Expected stats object but received:', typeof response.data, response.data);
+        setStats(null);
+      }
     } catch (error) {
       console.error('Failed to fetch stats:', error);
+      setStats(null);
     } finally {
       setLoading(false);
     }
