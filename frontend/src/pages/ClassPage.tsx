@@ -80,10 +80,12 @@ const ClassPage: React.FC = () => {
     try {
       const response = await axios.get(`${getApiBaseUrl()}/classes/${id}`);
       console.log('Class details API response:', response.data);
+      console.log('Response type:', typeof response.data);
+      console.log('Response status:', response.status);
       
       // Ensure materials structure exists
       const classData = response.data;
-      if (classData && typeof classData === 'object') {
+      if (classData && typeof classData === 'object' && !classData.error) {
         // Initialize materials if missing
         if (!classData.materials) {
           classData.materials = { lyrics: [], recordings: [] };
@@ -98,7 +100,8 @@ const ClassPage: React.FC = () => {
         
         setClassData(classData);
       } else {
-        setError('Invalid class data received');
+        console.error('Invalid class data:', classData);
+        setError(`Invalid class data received: ${JSON.stringify(classData)}`);
       }
     } catch (err: any) {
       console.error('Class details fetch error:', err);

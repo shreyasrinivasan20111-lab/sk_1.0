@@ -148,19 +148,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (req.method === 'GET') {
-      // Extract class ID from the URL path
-      const pathParts = req.url?.split('/') || [];
-      const classId = pathParts[pathParts.length - 1];
+      // Extract class ID from the URL path - multiple methods for Vercel compatibility
+      let classId: string | undefined;
+      
+      // Method 1: Try to get from query parameters (Vercel's preferred way)
+      if (req.query && typeof req.query.id === 'string') {
+        classId = req.query.id;
+      } else {
+        // Method 2: Parse from URL path as fallback
+        const pathParts = req.url?.split('/') || [];
+        classId = pathParts[pathParts.length - 1];
+      }
+      
+      console.log('Extracting class ID:', { url: req.url, query: req.query, classId });
       
       if (!classId) {
         return res.status(400).json({ error: 'Class ID required' });
       }
 
       const classData = classesWithMaterials[classId];
+      console.log('Looking up class data:', { classId, found: !!classData, availableIds: Object.keys(classesWithMaterials) });
+      
       if (!classData) {
-        return res.status(404).json({ error: 'Class not found' });
+        return res.status(404).json({ error: `Class not found for ID: ${classId}` });
       }
 
+      console.log('Returning class data:', { id: classData.id, name: classData.name });
       return res.status(200).json(classData);
     }
 
