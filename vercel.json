@@ -10,7 +10,7 @@
     },
     {
       "source": "/api/user/classes",
-      "destination": "/api/classes"
+      "destination": "/api/classes?userClasses=true"
     },
     {
       "source": "/api/admin/students",

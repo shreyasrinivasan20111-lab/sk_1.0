@@ -1,7 +1,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Mock students data for user-specific classes
-const students = [
+// Import students from a shared location or use global object
+// For serverless compatibility, we'll use a simple approach
+let students = [
   {
     id: 2,
     name: 'Demo Student',
@@ -10,6 +11,15 @@ const students = [
     registration_date: '2024-11-10'
   }
 ];
+
+// Function to sync student data (called from admin operations)
+function syncStudentData() {
+  // In a real app, this would fetch from database
+  // For demo, we'll check if global.students exists (set by admin.ts)
+  if (typeof global !== 'undefined' && global.students) {
+    students = global.students;
+  }
+}
 
 // All available classes with detailed materials
 const allClasses = [
@@ -108,15 +118,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { url } = req;
   const path = url?.split('?')[0] || '';
+  
+  // Check for userClasses query parameter to identify user-specific requests
+  const isUserClassesRequest = req.query.userClasses === 'true';
 
   try {
-    // Route based on URL path
-    if (path.endsWith('/classes') || path === '/api/classes') {
-      return await handleAllClasses(req, res);
-    } else if (path.match(/\/classes\/\d+$/) || path.includes('/classes/')) {
-      return await handleSingleClass(req, res);
-    } else if (path.endsWith('/user/classes')) {
+    // Route based on URL path and query parameters
+    if (isUserClassesRequest) {
       return await handleUserClasses(req, res);
+    } else if (path.match(/\/classes\/\d+$/) || path.includes('/classes/') || req.query.id) {
+      return await handleSingleClass(req, res);
+    } else if (path.endsWith('/classes') || path === '/api/classes') {
+      return await handleAllClasses(req, res);
     } else {
       return res.status(404).json({ error: 'Class endpoint not found' });
     }
@@ -180,9 +193,16 @@ async function handleUserClasses(req: VercelRequest, res: VercelResponse) {
     return res.status(200).json(allClasses);
   }
 
+  // Sync student data before processing
+  syncStudentData();
+
   // For students, return only assigned classes
   const userId = tokenData.userId;
   const student = students.find(s => s.id === userId);
+  
+  console.log('User ID:', userId);
+  console.log('Found student:', student);
+  console.log('All students:', students);
   
   if (!student || !student.assigned_classes) {
     return res.status(200).json([]);

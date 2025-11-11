@@ -11,6 +11,11 @@ const students = [
   }
 ];
 
+// Set global reference for cross-function access
+if (typeof global !== 'undefined') {
+  global.students = students;
+}
+
 // Mock practice sessions data
 const practiceSessions: any[] = [];
 
@@ -143,6 +148,13 @@ async function handleAssignClass(req: VercelRequest, res: VercelResponse) {
   currentClasses.push(classToAssign.name);
   student.assigned_classes = currentClasses.join(',');
 
+  // Update global reference
+  if (typeof global !== 'undefined') {
+    global.students = students;
+  }
+
+  console.log('Class assigned. Student now has:', student.assigned_classes);
+
   return res.status(200).json({
     message: 'Class assigned successfully',
     student: student
@@ -179,6 +191,13 @@ async function handleRemoveClass(req: VercelRequest, res: VercelResponse) {
 
   currentClasses = currentClasses.filter(name => name !== classToRemove.name);
   student.assigned_classes = currentClasses.join(',');
+
+  // Update global reference
+  if (typeof global !== 'undefined') {
+    global.students = students;
+  }
+
+  console.log('Class removed. Student now has:', student.assigned_classes);
 
   return res.status(200).json({
     message: 'Class assignment removed successfully',
