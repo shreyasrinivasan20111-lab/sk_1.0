@@ -16,17 +16,45 @@ function getStudentsData() {
   ];
 }
 
-// Function to get current student assignments
-// This is where we'll simulate persistence across function calls
-function getCurrentStudentAssignments(userId: number) {
-  // TEMPORARY: Hardcode assignment for testing
-  // This proves the logic works - admin can update this later
-  if (userId === 2) {
-    return 'Śravaṇaṃ'; // Test: Demo student has Śravaṇaṃ assigned
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Simple file-based storage for assignments (works in Vercel's /tmp directory)
+const ASSIGNMENTS_FILE = '/tmp/student-assignments.json';
+
+// Function to get current student assignments from file
+function getCurrentStudentAssignments(userId: number): string {
+  try {
+    if (fs.existsSync(ASSIGNMENTS_FILE)) {
+      const data = fs.readFileSync(ASSIGNMENTS_FILE, 'utf8');
+      const assignments = JSON.parse(data);
+      return assignments[userId] || '';
+    }
+  } catch (error) {
+    console.log('Error reading assignments file:', error);
   }
-  
-  return ''; // No assignments for other users
+  return '';
 }
+
+// Function to update student assignments in file
+function updateStudentAssignments(userId: number, assignments: string) {
+  try {
+    let data = {};
+    if (fs.existsSync(ASSIGNMENTS_FILE)) {
+      const fileContent = fs.readFileSync(ASSIGNMENTS_FILE, 'utf8');
+      data = JSON.parse(fileContent);
+    }
+    
+    data[userId] = assignments;
+    fs.writeFileSync(ASSIGNMENTS_FILE, JSON.stringify(data));
+    console.log(`Updated assignments for user ${userId}: ${assignments}`);
+  } catch (error) {
+    console.log('Error writing assignments file:', error);
+  }
+}
+
+// Export for use by admin functions
+export { updateStudentAssignments };
 
 // All available classes with detailed materials
 const allClasses = [
@@ -212,9 +240,11 @@ async function handleUserClasses(req: VercelRequest, res: VercelResponse) {
   const student = students.find(s => s.id === userId);
   console.log('Found student by ID:', student);
   
-  // Get current assignments (this would come from database in real app)
+  // Get current assignments from file storage
   const currentAssignments = getCurrentStudentAssignments(userId);
-  console.log('Current assignments from "database":', currentAssignments);
+  
+  console.log('Current assignments from file storage:', currentAssignments);
+  console.log('Assignments file exists:', require('fs').existsSync('/tmp/student-assignments.json'));
   
   if (!currentAssignments) {
     console.log('No assignments found, returning empty array');

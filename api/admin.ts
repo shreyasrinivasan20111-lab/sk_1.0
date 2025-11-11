@@ -1,4 +1,25 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
+import * as fs from 'fs';
+
+// Simple file-based storage for assignments (works in Vercel's /tmp directory)
+const ASSIGNMENTS_FILE = '/tmp/student-assignments.json';
+
+// Function to update student assignments in file
+function updateStudentAssignments(userId: number, assignments: string) {
+  try {
+    let data = {};
+    if (fs.existsSync(ASSIGNMENTS_FILE)) {
+      const fileContent = fs.readFileSync(ASSIGNMENTS_FILE, 'utf8');
+      data = JSON.parse(fileContent);
+    }
+    
+    data[userId] = assignments;
+    fs.writeFileSync(ASSIGNMENTS_FILE, JSON.stringify(data));
+    console.log(`File updated - assignments for user ${userId}: ${assignments}`);
+  } catch (error) {
+    console.log('Error writing assignments file:', error);
+  }
+}
 
 // Mock students data
 const students = [
@@ -148,16 +169,13 @@ async function handleAssignClass(req: VercelRequest, res: VercelResponse) {
   currentClasses.push(classToAssign.name);
   student.assigned_classes = currentClasses.join(',');
 
-  // Update global reference
-  if (typeof global !== 'undefined') {
-    global.students = students;
-  }
+  // Update file-based storage for cross-function persistence
+  updateStudentAssignments(parseInt(studentId), student.assigned_classes);
 
   console.log('=== ADMIN ASSIGN DEBUG ===');
   console.log('Class assigned to student ID:', studentId);
-  console.log('Student object after assignment:', student);
-  console.log('All students after assignment:', JSON.stringify(students, null, 2));
-  console.log('Global students set:', typeof global !== 'undefined' ? global.students : 'global not available');
+  console.log('Student assigned_classes:', student.assigned_classes);
+  console.log('File storage updated successfully');
   console.log('=== END ADMIN DEBUG ===');
 
   return res.status(200).json({
@@ -197,12 +215,11 @@ async function handleRemoveClass(req: VercelRequest, res: VercelResponse) {
   currentClasses = currentClasses.filter(name => name !== classToRemove.name);
   student.assigned_classes = currentClasses.join(',');
 
-  // Update global reference
-  if (typeof global !== 'undefined') {
-    global.students = students;
-  }
+  // Update file-based storage for cross-function persistence
+  updateStudentAssignments(parseInt(studentId), student.assigned_classes);
 
   console.log('Class removed. Student now has:', student.assigned_classes);
+  console.log('File storage updated successfully');
 
   return res.status(200).json({
     message: 'Class assignment removed successfully',
