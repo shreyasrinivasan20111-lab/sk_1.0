@@ -27,8 +27,16 @@ function getCurrentStudentAssignments(userId: number): string {
   try {
     if (fs.existsSync(ASSIGNMENTS_FILE)) {
       const data = fs.readFileSync(ASSIGNMENTS_FILE, 'utf8');
+      console.log('File content read:', data);
       const assignments = JSON.parse(data);
-      return assignments[userId] || '';
+      console.log('Parsed assignments object:', assignments);
+      console.log(`Looking for user ID: ${userId} (type: ${typeof userId})`);
+      console.log('Available user IDs in file:', Object.keys(assignments));
+      const result = assignments[userId] || assignments[userId.toString()] || '';
+      console.log(`Assignment result for user ${userId}:`, result);
+      return result;
+    } else {
+      console.log('Assignments file does not exist');
     }
   } catch (error) {
     console.log('Error reading assignments file:', error);
@@ -244,6 +252,7 @@ async function handleUserClasses(req: VercelRequest, res: VercelResponse) {
   const currentAssignments = getCurrentStudentAssignments(userId);
   
   console.log('Current assignments from file storage:', currentAssignments);
+  console.log('Raw assignments string length:', currentAssignments?.length);
   console.log('Assignments file exists:', require('fs').existsSync('/tmp/student-assignments.json'));
   
   if (!currentAssignments) {
@@ -254,14 +263,21 @@ async function handleUserClasses(req: VercelRequest, res: VercelResponse) {
   // Parse assigned class names from comma-separated string
   const assignedClassNames = currentAssignments.split(',').map(name => name.trim()).filter(name => name);
   
+  console.log('Parsed assigned class names:', assignedClassNames);
+  console.log('Number of assigned classes:', assignedClassNames.length);
+  console.log('Available class names:', allClasses.map(c => c.name));
+  
   if (assignedClassNames.length === 0) {
+    console.log('No valid class names found, returning empty array');
     return res.status(200).json([]);
   }
 
   // Filter classes based on assignments
-  const assignedClasses = allClasses.filter(cls => 
-    assignedClassNames.includes(cls.name)
-  );
+  const assignedClasses = allClasses.filter(cls => {
+    const isIncluded = assignedClassNames.includes(cls.name);
+    console.log(`Class "${cls.name}" included: ${isIncluded}`);
+    return isIncluded;
+  });
 
   return res.status(200).json(assignedClasses);
 }

@@ -10,12 +10,20 @@ function updateStudentAssignments(userId: number, assignments: string) {
     let data = {};
     if (fs.existsSync(ASSIGNMENTS_FILE)) {
       const fileContent = fs.readFileSync(ASSIGNMENTS_FILE, 'utf8');
+      console.log('Existing file content before update:', fileContent);
       data = JSON.parse(fileContent);
+    } else {
+      console.log('Creating new assignments file');
     }
     
+    console.log('Data before update:', data);
     data[userId] = assignments;
-    fs.writeFileSync(ASSIGNMENTS_FILE, JSON.stringify(data));
+    console.log('Data after update:', data);
+    
+    const stringifiedData = JSON.stringify(data);
+    fs.writeFileSync(ASSIGNMENTS_FILE, stringifiedData);
     console.log(`File updated - assignments for user ${userId}: ${assignments}`);
+    console.log('Written to file:', stringifiedData);
   } catch (error) {
     console.log('Error writing assignments file:', error);
   }
@@ -162,6 +170,13 @@ async function handleAssignClass(req: VercelRequest, res: VercelResponse) {
   let currentClasses = student.assigned_classes ? 
     student.assigned_classes.split(',').map(name => name.trim()).filter(name => name) : [];
 
+  console.log('=== ADMIN ASSIGN DEBUG (BEFORE) ===');
+  console.log('Student ID:', studentId);
+  console.log('Class to assign:', classToAssign.name);
+  console.log('Current student.assigned_classes:', student.assigned_classes);
+  console.log('Parsed current classes:', currentClasses);
+  console.log('==========================================');
+
   if (currentClasses.includes(classToAssign.name)) {
     return res.status(400).json({ error: 'Class already assigned to this student' });
   }
@@ -172,9 +187,10 @@ async function handleAssignClass(req: VercelRequest, res: VercelResponse) {
   // Update file-based storage for cross-function persistence
   updateStudentAssignments(parseInt(studentId), student.assigned_classes);
 
-  console.log('=== ADMIN ASSIGN DEBUG ===');
+  console.log('=== ADMIN ASSIGN DEBUG (AFTER) ===');
   console.log('Class assigned to student ID:', studentId);
-  console.log('Student assigned_classes:', student.assigned_classes);
+  console.log('New currentClasses array:', currentClasses);
+  console.log('Final student.assigned_classes:', student.assigned_classes);
   console.log('File storage updated successfully');
   console.log('=== END ADMIN DEBUG ===');
 
