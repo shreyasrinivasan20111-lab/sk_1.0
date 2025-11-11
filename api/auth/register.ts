@@ -1,5 +1,8 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { users, addUser, addStudent, getUserByEmail, getNextUserId } from '../shared/data';
+
+// Note: In serverless functions, each invocation is independent
+// For demo purposes, we'll use a simple approach with predefined users
+// In production, this would use a proper database
 
 interface User {
   id: number;
@@ -8,6 +11,27 @@ interface User {
   password: string;
   role: 'admin' | 'student';
 }
+
+// Static users for demo - in production this would be a database
+const users: User[] = [
+  {
+    id: 1,
+    name: 'Admin User',
+    email: 'admin@saikalpataru.com',
+    password: 'admin@sai123',
+    role: 'admin'
+  },
+  // Demo students for testing
+  {
+    id: 2,
+    name: 'Demo Student',
+    email: 'student@example.com',
+    password: 'student123',
+    role: 'student'
+  }
+];
+
+let userIdCounter = 3;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
@@ -35,24 +59,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Check if user already exists
-    const existingUser = getUserByEmail(email);
+    const existingUser = users.find(u => u.email === email);
     if (existingUser) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
     // Create new user
     const newUser: User = {
-      id: getNextUserId(),
+      id: userIdCounter++,
       name,
       email,
       password, // In production, hash this password
       role: 'student'
     };
 
-    addUser(newUser);
+    users.push(newUser);
     
-    // Also add to students list for admin management
-    addStudent(newUser);
+    // Note: In a real app, this would be persisted to a database
+    // For this demo, the user will only exist for this session
     
     // Create simple token
     const tokenData = {

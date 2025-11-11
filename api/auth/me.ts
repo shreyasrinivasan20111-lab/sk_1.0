@@ -1,5 +1,20 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { getUserById } from '../shared/data';
+
+// Simple in-memory users store for demo (matches login.ts)
+const users = [
+  {
+    id: 1,
+    email: 'admin@saikalpataru.com',
+    name: 'Admin User',
+    role: 'admin' as const
+  },
+  {
+    id: 2,
+    email: 'student@example.com',
+    name: 'Demo Student',
+    role: 'student' as const
+  }
+];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
@@ -32,7 +47,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Find user by ID from token
-    const user = getUserById(tokenData.userId);
+    const user = users.find(u => u.id === tokenData.userId);
     if (!user) {
       return res.status(401).json({ error: 'Invalid user' });
     }

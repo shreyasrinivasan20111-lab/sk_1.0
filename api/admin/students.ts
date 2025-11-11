@@ -1,5 +1,15 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { getAllStudents } from '../shared/data';
+
+// Mock students data for demo
+const students = [
+  {
+    id: 2,
+    name: 'Demo Student',
+    email: 'student@example.com',
+    assigned_classes: '', // Empty by default - admin needs to assign classes
+    registration_date: '2024-11-10'
+  }
+];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
@@ -33,7 +43,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (req.method === 'GET') {
-      return res.status(200).json(getAllStudents());
+      return res.status(200).json(students);
     }
 
     return res.status(405).json({ error: 'Method not allowed' });

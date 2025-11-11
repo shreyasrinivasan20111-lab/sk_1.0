@@ -1,5 +1,15 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { getStudentById } from '../shared/data';
+
+// Mock students data (matches admin/students.ts)
+const students = [
+  {
+    id: 2,
+    name: 'Demo Student',
+    email: 'student@example.com',
+    assigned_classes: '', // Empty by default - admin needs to assign classes
+    registration_date: '2024-11-10'
+  }
+];
 
 // Import class data
 const allClasses = [
@@ -123,7 +133,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // For students, return only assigned classes
     const userId = tokenData.userId;
-    const student = getStudentById(userId);
+    const student = students.find(s => s.id === userId);
     
     if (!student || !student.assigned_classes) {
       return res.status(200).json([]);
