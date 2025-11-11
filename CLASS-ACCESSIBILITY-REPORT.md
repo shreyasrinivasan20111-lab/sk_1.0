@@ -8,15 +8,16 @@
 - **Authentication**: All endpoints protected with JWT Bearer token validation
 
 ### 📋 Available Classes
-All 5 spiritual learning classes are properly configured:
+All 6 spiritual learning classes are properly configured:
 
 | ID | Class Name | Description | Instructor | Materials |
 |----|------------|-------------|------------|-----------|
-| 1 | **Kirtanam** | Devotional singing and chanting | Swami Ramanananda | Bhaja Govindam, Hare Krishna + Audio |
-| 2 | **Smaranam** | Constant remembrance of the divine | Brahmacharini Saraswati | Names of Krishna |
-| 3 | **Pada Sevanam** | Humble service at lotus feet | Acharya Vishwanath | Service Meditation |
-| 4 | **Archanam** | Worship through rituals | Pandit Krishna Das | Aarti Songs |  
-| 5 | **Vandanam** | Prayer and surrender | Mata Devi Priya | Surrender Prayer |
+| 1 | **Śravaṇaṃ** | Hearing and listening to sacred teachings | Guru Maharaj | Śrīmad Bhāgavatam + Audio |
+| 2 | **Kirtanam** | Devotional singing and chanting | Swami Ramanananda | Bhaja Govindam, Hare Krishna + Audio |
+| 3 | **Smaranam** | Constant remembrance of the divine | Brahmacharini Saraswati | Names of Krishna |
+| 4 | **Pada Sevanam** | Humble service at lotus feet | Acharya Vishwanath | Service Meditation |
+| 5 | **Archanam** | Worship through rituals | Pandit Krishna Das | Aarti Songs |  
+| 6 | **Vandanam** | Prayer and surrender | Mata Devi Priya | Surrender Prayer |
 
 ### 🎯 Frontend Routing
 - **Dashboard**: Generates links to `/class/{id}` for each class
@@ -38,12 +39,13 @@ All 5 spiritual learning classes are properly configured:
 - ✅ Proper error boundaries implemented
 
 ### 🎉 Conclusion
-**All 5 class pages are fully accessible and functional:**
-- `/class/1` → Kirtanam (Devotional Singing)
-- `/class/2` → Smaranam (Divine Remembrance) 
-- `/class/3` → Pada Sevanam (Service)
-- `/class/4` → Archanam (Worship)
-- `/class/5` → Vandanam (Surrender)
+**All 6 class pages are fully accessible and functional:**
+- `/class/1` → Śravaṇaṃ (Sacred Listening)
+- `/class/2` → Kirtanam (Devotional Singing)
+- `/class/3` → Smaranam (Divine Remembrance) 
+- `/class/4` → Pada Sevanam (Service)
+- `/class/5` → Archanam (Worship)
+- `/class/6` → Vandanam (Surrender)
 
 Each class page includes:
 - Detailed description and instructor information

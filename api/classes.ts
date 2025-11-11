@@ -13,34 +13,41 @@ interface Class {
 const classes: Class[] = [
   {
     id: 1,
+    name: 'Śravaṇaṃ',
+    description: 'Hearing and listening to divine stories, scriptures, and sacred teachings.',
+    instructor: 'Guru Maharaj',
+    schedule: 'Saturdays 5:00 PM - 6:30 PM'
+  },
+  {
+    id: 2,
     name: 'Kirtanam',
     description: 'Devotional singing and chanting of divine names and glories.',
     instructor: 'Swami Ramanananda',
     schedule: 'Mondays 7:00 PM - 8:30 PM'
   },
   {
-    id: 2,
+    id: 3,
     name: 'Smaranam', 
     description: 'Constant remembrance and contemplation of the divine.',
     instructor: 'Brahmacharini Saraswati',
     schedule: 'Wednesdays 6:00 PM - 7:30 PM'
   },
   {
-    id: 3,
+    id: 4,
     name: 'Pada Sevanam',
     description: 'Humble service at the lotus feet of the Lord.',
     instructor: 'Acharya Vishwanath',
     schedule: 'Fridays 8:00 PM - 9:00 PM'
   },
   {
-    id: 4,
+    id: 5,
     name: 'Archanam',
     description: 'Worship through rituals, ceremonies, and offerings.',
     instructor: 'Pandit Krishna Das',
     schedule: 'Saturdays 6:00 PM - 7:30 PM'
   },
   {
-    id: 5,
+    id: 6,
     name: 'Vandanam',
     description: 'Prayer, prostration, and surrender to the divine will.',
     instructor: 'Mata Devi Priya',

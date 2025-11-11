@@ -3,9 +3,10 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 // Mock statistics data for demo
 const stats = {
   totalStudents: 3,
-  totalSessions: 5,
-  totalDuration: 220, // total minutes across all sessions
+  totalSessions: 6,
+  totalDuration: 260, // total minutes across all sessions
   studentsByClass: [
+    { class_name: 'Śravaṇaṃ', student_count: 1 },
     { class_name: 'Kirtanam', student_count: 1 },
     { class_name: 'Smaranam', student_count: 1 },
     { class_name: 'Pada Sevanam', student_count: 1 },

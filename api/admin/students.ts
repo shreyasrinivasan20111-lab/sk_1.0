@@ -6,21 +6,21 @@ const students = [
     id: 1,
     name: 'John Doe',
     email: 'john@example.com',
-    assigned_classes: 'Kirtanam,Smaranam',
+    assigned_classes: 'Śravaṇaṃ,Kirtanam,Smaranam',
     registration_date: '2024-01-15'
   },
   {
     id: 2,
     name: 'Jane Smith', 
     email: 'jane@example.com',
-    assigned_classes: 'Pada Sevanam,Archanam',
+    assigned_classes: 'Śravaṇaṃ,Pada Sevanam,Archanam',
     registration_date: '2024-02-20'
   },
   {
     id: 3,
     name: 'Mike Johnson',
     email: 'mike@example.com', 
-    assigned_classes: 'Vandanam',
+    assigned_classes: 'Śravaṇaṃ,Vandanam',
     registration_date: '2024-03-10'
   }
 ];

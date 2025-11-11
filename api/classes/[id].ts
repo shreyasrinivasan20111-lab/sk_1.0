@@ -4,6 +4,43 @@ import { VercelRequest, VercelResponse } from '@vercel/node';
 const classesWithMaterials: { [key: string]: any } = {
   '1': {
     id: 1,
+    name: 'Śravaṇaṃ',
+    description: 'Hearing and listening to divine stories, scriptures, and sacred teachings.',
+    instructor: 'Guru Maharaj',
+    schedule: 'Saturdays 5:00 PM - 6:30 PM',
+    materials: {
+      lyrics: [
+        {
+          id: 1,
+          title: 'Śrīmad Bhāgavatam Verses',
+          type: 'lyrics',
+          content: 'śrīmad-bhāgavataṃ purāṇam amalaṃ\nyad vaiṣṇavānāṃ priyam\nyasmin pāramahaṃsyam ekam amalaṃ\njñānaṃ paraṃ gīyate',
+          uploaded_by_name: 'Admin',
+          created_at: '2024-01-10T09:00:00Z'
+        },
+        {
+          id: 2,
+          title: 'Sacred Listening Practice',
+          type: 'lyrics',
+          content: 'Listen with devotion pure and true\nTo stories of the Divine blue\nHear the names that purify\nLet sacred sounds your soul sanctify',
+          uploaded_by_name: 'Admin',
+          created_at: '2024-01-12T10:00:00Z'
+        }
+      ],
+      recordings: [
+        {
+          id: 3,
+          title: 'Bhāgavatam Recitation',
+          type: 'recording',
+          file_path: '/uploads/bhagavatam-recitation.mp3',
+          uploaded_by_name: 'Guru Maharaj',
+          created_at: '2024-01-14T08:00:00Z'
+        }
+      ]
+    }
+  },
+  '2': {
+    id: 2,
     name: 'Kirtanam',
     description: 'Devotional singing and chanting of divine names and glories.',
     instructor: 'Swami Ramanananda',
@@ -11,7 +48,7 @@ const classesWithMaterials: { [key: string]: any } = {
     materials: {
       lyrics: [
         {
-          id: 1,
+          id: 4,
           title: 'Bhaja Govindam',
           type: 'lyrics',
           content: 'Bhaja govindam bhaja govindam\nGovindam bhaja moodha mate\nSamprapte sannihite kale\nNahi nahi rakshati dukrn karane',
@@ -19,7 +56,7 @@ const classesWithMaterials: { [key: string]: any } = {
           created_at: '2024-01-15T10:00:00Z'
         },
         {
-          id: 2,
+          id: 5,
           title: 'Hare Krishna Mahamantra',
           type: 'lyrics',
           content: 'Hare Krishna Hare Krishna\nKrishna Krishna Hare Hare\nHare Rama Hare Rama\nRama Rama Hare Hare',
@@ -29,7 +66,7 @@ const classesWithMaterials: { [key: string]: any } = {
       ],
       recordings: [
         {
-          id: 3,
+          id: 6,
           title: 'Bhaja Govindam - Audio Guide',
           type: 'recording',
           file_path: '/uploads/bhaja-govindam.mp3',
@@ -39,8 +76,8 @@ const classesWithMaterials: { [key: string]: any } = {
       ]
     }
   },
-  '2': {
-    id: 2,
+  '3': {
+    id: 3,
     name: 'Smaranam',
     description: 'Constant remembrance and contemplation of the divine.',
     instructor: 'Brahmacharini Saraswati',
@@ -48,7 +85,7 @@ const classesWithMaterials: { [key: string]: any } = {
     materials: {
       lyrics: [
         {
-          id: 4,
+          id: 7,
           title: 'Names of Krishna',
           type: 'lyrics',
           content: 'Krishna, Govinda, Gopala, Madhava\nKeshava, Madhusudana, Trivikrama\nVamana, Sridhara, Hrishikesha',
@@ -59,8 +96,8 @@ const classesWithMaterials: { [key: string]: any } = {
       recordings: []
     }
   },
-  '3': {
-    id: 3,
+  '4': {
+    id: 4,
     name: 'Pada Sevanam',
     description: 'Humble service at the lotus feet of the Lord.',
     instructor: 'Acharya Vishwanath',
@@ -68,7 +105,7 @@ const classesWithMaterials: { [key: string]: any } = {
     materials: {
       lyrics: [
         {
-          id: 5,
+          id: 8,
           title: 'Service Meditation',
           type: 'lyrics',
           content: 'At thy lotus feet, O Lord\nI offer my humble service\nWith devotion pure and true\nMay I serve thee always',
@@ -79,8 +116,8 @@ const classesWithMaterials: { [key: string]: any } = {
       recordings: []
     }
   },
-  '4': {
-    id: 4,
+  '5': {
+    id: 5,
     name: 'Archanam',
     description: 'Worship through rituals, ceremonies, and offerings.',
     instructor: 'Pandit Krishna Das',
@@ -88,7 +125,7 @@ const classesWithMaterials: { [key: string]: any } = {
     materials: {
       lyrics: [
         {
-          id: 6,
+          id: 9,
           title: 'Aarti Songs',
           type: 'lyrics',
           content: 'Om jai jagadish hare\nSwami jai jagadish hare\nBhakt jano ke sankat\nDas jano ke sankat\nKshan me dur kare',
@@ -99,8 +136,8 @@ const classesWithMaterials: { [key: string]: any } = {
       recordings: []
     }
   },
-  '5': {
-    id: 5,
+  '6': {
+    id: 6,
     name: 'Vandanam',
     description: 'Prayer, prostration, and surrender to the divine will.',
     instructor: 'Mata Devi Priya',
@@ -108,7 +145,7 @@ const classesWithMaterials: { [key: string]: any } = {
     materials: {
       lyrics: [
         {
-          id: 7,
+          id: 10,
           title: 'Surrender Prayer',
           type: 'lyrics',
           content: 'I surrender all to thee\nMy Lord, my guide, my light\nTake my will, my heart, my soul\nMake me thine completely',

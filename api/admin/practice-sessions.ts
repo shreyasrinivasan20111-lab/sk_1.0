@@ -5,6 +5,14 @@ const practiceSessions = [
   {
     id: 1,
     student_name: 'John Doe',
+    class_name: 'Śravaṇaṃ', 
+    duration: 40,
+    date: '2024-11-09',
+    notes: 'Deep listening to Bhāgavatam recitation'
+  },
+  {
+    id: 2,
+    student_name: 'John Doe',
     class_name: 'Kirtanam', 
     duration: 45,
     date: '2024-11-08',
@@ -20,6 +28,14 @@ const practiceSessions = [
   },
   {
     id: 3,
+    student_name: 'Jane Smith',
+    class_name: 'Pada Sevanam',
+    duration: 60,
+    date: '2024-11-07', 
+    notes: 'Service meditation practice'
+  },
+  {
+    id: 4,
     student_name: 'Mike Johnson',
     class_name: 'Vandanam',
     duration: 30,
@@ -27,7 +43,7 @@ const practiceSessions = [
     notes: 'Prayer and prostration practice'
   },
   {
-    id: 4,
+    id: 5,
     student_name: 'John Doe', 
     class_name: 'Smaranam',
     duration: 35,
@@ -35,7 +51,7 @@ const practiceSessions = [
     notes: 'Remembrance and contemplation'
   },
   {
-    id: 5,
+    id: 6,
     student_name: 'Jane Smith',
     class_name: 'Archanam',
     duration: 50,
