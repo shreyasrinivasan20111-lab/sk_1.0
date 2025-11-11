@@ -25,9 +25,20 @@ const Dashboard: React.FC = () => {
   const fetchClasses = async () => {
     try {
       const response = await axios.get(`${getApiBaseUrl()}/classes`);
-      setClasses(response.data);
+      console.log('Classes API response:', response.data);
+      
+      // Ensure response.data is an array
+      if (Array.isArray(response.data)) {
+        setClasses(response.data);
+      } else {
+        console.error('Expected array but received:', typeof response.data, response.data);
+        setError('Invalid response format from server');
+        setClasses([]);
+      }
     } catch (err: any) {
+      console.error('Classes fetch error:', err);
       setError(err.response?.data?.error || 'Failed to load classes');
+      setClasses([]);
     } finally {
       setLoading(false);
     }
