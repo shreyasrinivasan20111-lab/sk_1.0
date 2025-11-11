@@ -6,19 +6,43 @@
   "rewrites": [
     {
       "source": "/api/classes/([^/]+)",
-      "destination": "/api/classes/[id]?id=$1"
+      "destination": "/api/classes?id=$1"
     },
     {
       "source": "/api/user/classes",
-      "destination": "/api/user/classes"
+      "destination": "/api/classes"
+    },
+    {
+      "source": "/api/admin/students",
+      "destination": "/api/admin"
+    },
+    {
+      "source": "/api/admin/practice-sessions",
+      "destination": "/api/admin"
+    },
+    {
+      "source": "/api/admin/stats",
+      "destination": "/api/admin"
     },
     {
       "source": "/api/admin/assign-class",
-      "destination": "/api/admin/assign-class"
+      "destination": "/api/admin"
     },
     {
       "source": "/api/admin/remove-class",
-      "destination": "/api/admin/remove-class"
+      "destination": "/api/admin"
+    },
+    {
+      "source": "/api/auth/login",
+      "destination": "/api/auth"
+    },
+    {
+      "source": "/api/auth/register",
+      "destination": "/api/auth"
+    },
+    {
+      "source": "/api/auth/me",
+      "destination": "/api/auth"
     },
     {
       "source": "/api/(.*)",

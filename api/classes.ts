@@ -1,98 +1,204 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Simple in-memory classes store for demo
-interface Class {
-  id: number;
-  name: string;  // Changed from title to name to match frontend expectation
-  description: string;
-  instructor?: string;
-  schedule?: string;
-  materials?: any[];
-}
+// Mock students data for user-specific classes
+const students = [
+  {
+    id: 2,
+    name: 'Demo Student',
+    email: 'student@example.com',
+    assigned_classes: '',
+    registration_date: '2024-11-10'
+  }
+];
 
-const classes: Class[] = [
+// All available classes with detailed materials
+const allClasses = [
   {
     id: 1,
     name: 'Śravaṇaṃ',
-    description: 'Hearing and listening to divine stories, scriptures, and sacred teachings.',
-    instructor: 'Guru Maharaj',
-    schedule: 'Saturdays 5:00 PM - 6:30 PM'
+    description: 'Sacred listening and hearing about the divine',
+    materials: {
+      lyrics: `Śravaṇaṃ - The Path of Sacred Listening
+
+"śravaṇaṃ kīrtanaṃ viṣṇoḥ smaraṇaṃ pāda-sevanam
+arcanaṃ vandanaṃ dāsyaṃ sakhyam ātma-nivedanam"
+
+Sacred listening (śravaṇaṃ) is the foundational practice of devotional life...`,
+      audio_url: '/audio/sravanam.mp3'
+    }
   },
   {
     id: 2,
     name: 'Kirtanam',
-    description: 'Devotional singing and chanting of divine names and glories.',
-    instructor: 'Swami Ramanananda',
-    schedule: 'Mondays 7:00 PM - 8:30 PM'
+    description: 'Devotional singing and chanting',
+    materials: {
+      lyrics: `Kirtanam - The Path of Sacred Sound
+
+"Hare Krishna Hare Krishna Krishna Krishna Hare Hare
+Hare Rama Hare Rama Rama Rama Hare Hare"
+
+Through sacred sound (kīrtana), we purify consciousness...`,
+      audio_url: '/audio/kirtanam.mp3'
+    }
   },
   {
     id: 3,
-    name: 'Smaranam', 
-    description: 'Constant remembrance and contemplation of the divine.',
-    instructor: 'Brahmacharini Saraswati',
-    schedule: 'Wednesdays 6:00 PM - 7:30 PM'
+    name: 'Smaranam',
+    description: 'Remembrance and contemplation',
+    materials: {
+      lyrics: `Smaranam - The Path of Divine Remembrance
+
+"smartavyaḥ satataṃ viṣṇur vismartavyo na jātucit
+sarve vidhi-niṣedhāḥ syur etayor eva kiṅkarāḥ"
+
+Constant remembrance (smaraṇa) of the Supreme...`,
+      audio_url: '/audio/smaranam.mp3'
+    }
   },
   {
     id: 4,
     name: 'Pada Sevanam',
-    description: 'Humble service at the lotus feet of the Lord.',
-    instructor: 'Acharya Vishwanath',
-    schedule: 'Fridays 8:00 PM - 9:00 PM'
+    description: 'Service to the lotus feet',
+    materials: {
+      lyrics: `Pada Sevanam - The Path of Divine Service
+
+"pāda-sevanam" refers to serving the lotus feet of the Lord...
+
+Through humble service, we develop genuine humility...`,
+      audio_url: '/audio/pada-sevanam.mp3'
+    }
   },
   {
     id: 5,
     name: 'Archanam',
-    description: 'Worship through rituals, ceremonies, and offerings.',
-    instructor: 'Pandit Krishna Das',
-    schedule: 'Saturdays 6:00 PM - 7:30 PM'
+    description: 'Ritualistic worship and offerings',
+    materials: {
+      lyrics: `Archanam - The Path of Sacred Worship
+
+"arcanaṃ" involves ritualistic worship with offerings...
+
+Through sacred worship, we honor the divine presence...`,
+      audio_url: '/audio/archanam.mp3'
+    }
   },
   {
     id: 6,
     name: 'Vandanam',
-    description: 'Prayer, prostration, and surrender to the divine will.',
-    instructor: 'Mata Devi Priya',
-    schedule: 'Sundays 9:00 AM - 10:30 AM'
+    description: 'Prostrations and prayers',
+    materials: {
+      lyrics: `Vandanam - The Path of Humble Surrender
+
+"vandanaṃ" means offering respectful prostrations...
+
+Through surrender and prayer, we humble the ego...`,
+      audio_url: '/audio/vandanam.mp3'
+    }
   }
 ];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // Check authentication
+  const { url } = req;
+  const path = url?.split('?')[0] || '';
+
+  try {
+    // Route based on URL path
+    if (path.endsWith('/classes') || path === '/api/classes') {
+      return await handleAllClasses(req, res);
+    } else if (path.match(/\/classes\/\d+$/) || path.includes('/classes/')) {
+      return await handleSingleClass(req, res);
+    } else if (path.endsWith('/user/classes')) {
+      return await handleUserClasses(req, res);
+    } else {
+      return res.status(404).json({ error: 'Class endpoint not found' });
+    }
+  } catch (error) {
+    console.error('Classes API Error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
+async function handleAllClasses(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Return all classes (for admin panel and general class list)
+  return res.status(200).json(allClasses);
+}
+
+async function handleSingleClass(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Extract class ID from URL
+  const { url } = req;
+  const classIdMatch = url?.match(/\/classes\/(\d+)/) || url?.match(/id=(\d+)/);
+  const classId = classIdMatch ? parseInt(classIdMatch[1]) : null;
+
+  if (!classId) {
+    return res.status(400).json({ error: 'Class ID is required' });
+  }
+
+  const classData = allClasses.find(c => c.id === classId);
+  if (!classData) {
+    return res.status(404).json({ error: 'Class not found' });
+  }
+
+  return res.status(200).json(classData);
+}
+
+async function handleUserClasses(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Check authentication for user-specific classes
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Authorization token required' });
   }
 
-  try {
-    // Decode and validate token
-    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
-    const tokenData = JSON.parse(atob(token)); // Base64 decode and parse
-    
-    // Check if token is expired
-    if (Date.now() > tokenData.exp) {
-      return res.status(401).json({ error: 'Token expired' });
-    }
-
-    if (req.method === 'GET') {
-      // Return all classes for now (in real app, filter by user role/permissions)
-      return res.status(200).json(classes);
-    }
-
-    return res.status(405).json({ error: 'Method not allowed' });
-
-  } catch (error) {
-    console.error('Classes API Error:', error);
-    if (error instanceof SyntaxError) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
-    return res.status(500).json({ error: 'Internal server error' });
+  const token = authHeader.substring(7);
+  const tokenData = JSON.parse(atob(token));
+  
+  if (Date.now() > tokenData.exp) {
+    return res.status(401).json({ error: 'Token expired' });
   }
+
+  // If user is admin, return all classes
+  if (tokenData.role === 'admin') {
+    return res.status(200).json(allClasses);
+  }
+
+  // For students, return only assigned classes
+  const userId = tokenData.userId;
+  const student = students.find(s => s.id === userId);
+  
+  if (!student || !student.assigned_classes) {
+    return res.status(200).json([]);
+  }
+
+  // Parse assigned class names from comma-separated string
+  const assignedClassNames = student.assigned_classes.split(',').map(name => name.trim()).filter(name => name);
+  
+  if (assignedClassNames.length === 0) {
+    return res.status(200).json([]);
+  }
+
+  // Filter classes based on assignments
+  const assignedClasses = allClasses.filter(cls => 
+    assignedClassNames.includes(cls.name)
+  );
+
+  return res.status(200).json(assignedClasses);
 }
